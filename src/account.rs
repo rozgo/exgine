@@ -7,22 +7,27 @@ use std::ops;
 pub struct Quantity(pub i32);
 
 #[derive(Debug, Clone)]
-pub struct Account(pub HashMap<Asset, Quantity>);
+pub struct Account<TAsset: Asset>(pub HashMap<TAsset, Quantity>);
 
-pub enum Tranx {
-    Approved(Account, Account),
-    Denied(HashMap<Asset, Quantity>),
+pub enum Tranx<TAsset: Asset> {
+    Approved(Account<TAsset>, Account<TAsset>),
+    Denied(HashMap<TAsset, Quantity>),
 }
 
-impl Account {
-    pub fn quantity(&self, asset: &Asset) -> Quantity {
+impl<TAsset: Asset> Account<TAsset> {
+    pub fn quantity(&self, asset: &TAsset) -> Quantity {
         match self.0.get(asset) {
             Some(quantity) => quantity.clone(),
             None => Quantity(0),
         }
     }
 
-    pub fn exchange(rate: &Rate, quantity: Quantity, buyer: &Account, seller: &Account) -> Tranx {
+    pub fn exchange(
+        rate: &Rate<TAsset>,
+        quantity: Quantity,
+        buyer: &Account<TAsset>,
+        seller: &Account<TAsset>,
+    ) -> Tranx<TAsset> {
         let credit = &Account(rate.credit.clone()) * quantity;
         let debit = &Account(rate.debit.clone()) * quantity;
         let (buyer, seller) = (&(buyer - &debit) + &credit, &(seller - &credit) + &debit);
@@ -48,12 +53,12 @@ impl Account {
         }
     }
 
-    pub fn map(&self) -> &HashMap<Asset, Quantity> {
+    pub fn map(&self) -> &HashMap<TAsset, Quantity> {
         let Account(map) = self;
         map
     }
 
-    fn prime(&mut self, rhs: &Account) {
+    fn prime(&mut self, rhs: &Account<TAsset>) {
         let Account(lhs) = self;
         let Account(rhs) = rhs;
         for rhs_key in rhs.keys() {
@@ -63,7 +68,7 @@ impl Account {
         }
     }
 
-    fn op<F>(lhs: &Account, rhs: &Account, op: F) -> Account
+    fn op<F>(lhs: &Account<TAsset>, rhs: &Account<TAsset>, op: F) -> Account<TAsset>
     where
         F: Fn(&Quantity, &Quantity) -> Quantity,
     {
@@ -84,8 +89,8 @@ impl Account {
     }
 }
 
-impl PartialEq for Account {
-    fn eq(&self, rhs: &Account) -> bool {
+impl<TAsset: Asset> PartialEq for Account<TAsset> {
+    fn eq(&self, rhs: &Account<TAsset>) -> bool {
         let mut lhs = self.clone();
         let mut rhs = rhs.clone();
         lhs.prime(&rhs);
@@ -96,26 +101,26 @@ impl PartialEq for Account {
     }
 }
 
-impl<'a, 'b> ops::Add<&'a Account> for &'b Account {
-    type Output = Account;
+impl<'a, 'b, TAsset: Asset> ops::Add<&'a Account<TAsset>> for &'b Account<TAsset> {
+    type Output = Account<TAsset>;
 
-    fn add(self, rhs: &Account) -> Account {
+    fn add(self, rhs: &Account<TAsset>) -> Account<TAsset> {
         Account::op(self, rhs, |Quantity(lq), Quantity(rq)| Quantity(lq + rq))
     }
 }
 
-impl<'a, 'b> ops::Sub<&'a Account> for &'b Account {
-    type Output = Account;
+impl<'a, 'b, TAsset: Asset> ops::Sub<&'a Account<TAsset>> for &'b Account<TAsset> {
+    type Output = Account<TAsset>;
 
-    fn sub(self, rhs: &Account) -> Account {
+    fn sub(self, rhs: &Account<TAsset>) -> Account<TAsset> {
         Account::op(self, rhs, |Quantity(lq), Quantity(rq)| Quantity(lq - rq))
     }
 }
 
-impl<'a> ops::Mul<Quantity> for &'a Account {
-    type Output = Account;
+impl<'a, TAsset: Asset> ops::Mul<Quantity> for &'a Account<TAsset> {
+    type Output = Account<TAsset>;
 
-    fn mul(self, rhs: Quantity) -> Account {
+    fn mul(self, rhs: Quantity) -> Account<TAsset> {
         let Account(lhs) = self;
         let keys = lhs.keys();
         let mut lhs = lhs.clone();

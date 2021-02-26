@@ -1,14 +1,14 @@
 [package]
-name = "multiagent"
+name = "exgine"
 version = "0.1.0"
 authors = ["Alex Rozgo <alex.rozgo@gmail.com>"]
 
 [dependencies]
 
 [lib]
-name = "multiagent"
+name = "exgine"
 path = "src/lib.rs"
 
-[[bin]]
-name = "multiagent"
-path = "src/bin.rs"
+[[example]]
+name = "robot_mission"
+path = "examples/robot_mission/robot_mission.rs"
