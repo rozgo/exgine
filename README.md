@@ -1,9 +1,8 @@
-# Market Exchange Simulator
-A category theory inspired smart contract, where objects are assets and morphisms are rates, creating a mathematical formalization for an exchange (assets, accounts, rates and transactions).
+# Exchange Engine - A Market Exchange Simulator
+
+Category theory inspired; where objects are assets and morphisms are rates, creating a mathematical formalization for an exchange (assets, accounts, rates and transactions).
 
 Core component for [OwnedEconomies](https://github.com/rozgo/OwnedEconomies)
-
-
 ## Requirements:
 - Install Rust [https://rustup.rs](https://rustup.rs)
 ```
