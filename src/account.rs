@@ -101,7 +101,7 @@ impl<TAsset: Asset> PartialEq for Account<TAsset> {
     }
 }
 
-impl<'a, 'b, TAsset: Asset> ops::Add<&'a Account<TAsset>> for &'b Account<TAsset> {
+impl<TAsset: Asset> ops::Add<&Account<TAsset>> for &Account<TAsset> {
     type Output = Account<TAsset>;
 
     fn add(self, rhs: &Account<TAsset>) -> Account<TAsset> {
@@ -109,7 +109,7 @@ impl<'a, 'b, TAsset: Asset> ops::Add<&'a Account<TAsset>> for &'b Account<TAsset
     }
 }
 
-impl<'a, 'b, TAsset: Asset> ops::Sub<&'a Account<TAsset>> for &'b Account<TAsset> {
+impl<TAsset: Asset> ops::Sub<&Account<TAsset>> for &Account<TAsset> {
     type Output = Account<TAsset>;
 
     fn sub(self, rhs: &Account<TAsset>) -> Account<TAsset> {
@@ -117,7 +117,7 @@ impl<'a, 'b, TAsset: Asset> ops::Sub<&'a Account<TAsset>> for &'b Account<TAsset
     }
 }
 
-impl<'a, TAsset: Asset> ops::Mul<Quantity> for &'a Account<TAsset> {
+impl<TAsset: Asset> ops::Mul<Quantity> for &Account<TAsset> {
     type Output = Account<TAsset>;
 
     fn mul(self, rhs: Quantity) -> Account<TAsset> {
