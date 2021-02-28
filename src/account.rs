@@ -9,11 +9,17 @@ pub enum Quantity {
 }
 
 #[derive(Debug, Clone)]
-pub struct Account<TAsset: Asset>(pub HashMap<TAsset, Quantity>);
+pub struct Account<TAsset: Asset>(HashMap<TAsset, Quantity>);
 
 pub enum Tranx<TAsset: Asset> {
     Approved(Account<TAsset>, Account<TAsset>),
     Denied(HashMap<TAsset, Quantity>),
+}
+
+impl<TAsset: Asset> From<HashMap<TAsset, Quantity>> for Account<TAsset> {
+    fn from(assets: HashMap<TAsset, Quantity>) -> Self {
+        Account(assets)
+    }
 }
 
 impl<TAsset: Asset> Account<TAsset> {
@@ -55,9 +61,9 @@ impl<TAsset: Asset> Account<TAsset> {
         }
     }
 
-    pub fn map(&self) -> &HashMap<TAsset, Quantity> {
-        let Account(map) = self;
-        map
+    pub fn assets(&self) -> &HashMap<TAsset, Quantity> {
+        let Account(assets) = self;
+        assets
     }
 
     fn prime(&mut self, rhs: &Account<TAsset>) {

@@ -51,13 +51,13 @@ impl Agent {
 }
 
 fn mission_default() -> Account {
-    account::Account(hashmap![
+    Account::from(hashmap![
         Asset::MissionTime => Quantity::Amount(1000000),
     ])
 }
 
 fn agent_default() -> Account {
-    account::Account(hashmap![
+    Account::from(hashmap![
         Asset::MissionTime => Quantity::Amount(1),
         Asset::Trust => Quantity::Amount(10000),
         Asset::EnlistCertificate(Instant::now()) => Quantity::Amount(1),

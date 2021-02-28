@@ -47,13 +47,13 @@ type Rate = rate::Rate<RobotMissionAsset>;
 type Account = account::Account<RobotMissionAsset>;
 
 fn mission_default() -> Account {
-    account::Account(hashmap![
+    Account::from(hashmap![
         Asset::MissionTime => Quantity::Amount(1000000),
     ])
 }
 
 fn agent_default() -> Account {
-    account::Account(hashmap![
+    Account::from(hashmap![
         Asset::Reward(Reward::Score) => Quantity::Amount(10000),
         Asset::Reward(Reward::Token) => Quantity::Amount(10000),
         Asset::Reward(Reward::Prediction) => Quantity::Amount(10000),
@@ -82,14 +82,14 @@ fn rate_buy_lifetime() {
     let rates = rates_default();
     let rate = rates.get(&Market::MissionTimeWithResource).unwrap();
 
-    let res_seller = account::Account(hashmap![
+    let res_seller = Account::from(hashmap![
         Asset::MissionTime => Quantity::Amount(999999),
         Asset::Reward(Reward::Token) => Quantity::Amount(3),
         Asset::Reward(Reward::Prediction) => Quantity::Amount(9),
         Asset::Reward(Reward::Policy) => Quantity::Amount(1),
     ]);
 
-    let res_buyer = account::Account(hashmap![
+    let res_buyer = Account::from(hashmap![
         Asset::MissionTime => Quantity::Amount(1),
         Asset::Reward(Reward::Score) => Quantity::Amount(10000),
         Asset::Reward(Reward::Token) => Quantity::Amount(9997),
@@ -113,14 +113,14 @@ fn rate_buy_lifetime_quantity() {
     let rates = rates_default();
     let rate = rates.get(&Market::MissionTimeWithResource).unwrap();
 
-    let res_seller = account::Account(hashmap![
+    let res_seller = Account::from(hashmap![
         Asset::MissionTime => Quantity::Amount(999998),
         Asset::Reward(Reward::Token) => Quantity::Amount(6),
         Asset::Reward(Reward::Prediction) => Quantity::Amount(18),
         Asset::Reward(Reward::Policy) => Quantity::Amount(2),
     ]);
 
-    let res_buyer = account::Account(hashmap![
+    let res_buyer = Account::from(hashmap![
         Asset::MissionTime => Quantity::Amount(2),
         Asset::Reward(Reward::Score) => Quantity::Amount(10000),
         Asset::Reward(Reward::Token) => Quantity::Amount(9994),
