@@ -1,4 +1,4 @@
-use asset::*;
+use exgine::asset;
 use std::time::Instant;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Hash, Clone, Copy)]
@@ -27,7 +27,7 @@ pub enum RobotMissionAsset {
     EnlistCertificate(Instant),
 }
 
-impl Asset for RobotMissionAsset {}
+impl asset::Asset for RobotMissionAsset {}
 
 #[derive(Debug, PartialEq, Eq, Hash)]
 pub enum RobotMissionMarket {

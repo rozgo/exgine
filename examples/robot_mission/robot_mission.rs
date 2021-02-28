@@ -1,24 +1,26 @@
 extern crate exgine;
-
 mod market;
 
-use account::*;
-use exgine::*;
+use exgine::{
+    account::{self, Quantity, Tranx},
+    hashmap, rate,
+};
 use market::*;
-use rate::*;
 use std::collections::HashMap;
 use std::time::Instant;
 
+type Asset = RobotMissionAsset;
+type Market = RobotMissionMarket;
+type Rate = rate::Rate<RobotMissionAsset>;
+type Account = account::Account<RobotMissionAsset>;
+
 pub struct Agent {
-    pub account: Account<RobotMissionAsset>,
+    pub account: Account,
     pub is_alive: bool,
 }
 
-type Asset = RobotMissionAsset;
-type Market = RobotMissionMarket;
-
 impl Agent {
-    pub fn simulate(&mut self, rates: &HashMap<Market, Rate<Asset>>, mission: &Account<Asset>) {
+    pub fn simulate(&mut self, rates: &HashMap<Market, Rate>, mission: &Account) {
         // Every tick agent should be able to purchase 1 MissionTime.
         // First it tries to purchase MissionTime with its Resource through Market::MissionTimeWithResource.
         // If this fails, it will try to purchase through Market::MissionTimeWithTrust.
@@ -43,14 +45,14 @@ impl Agent {
     }
 }
 
-fn mission_default() -> Account<Asset> {
-    Account(hashmap![
+fn mission_default() -> Account {
+    account::Account(hashmap![
         Asset::MissionTime => Quantity(1000000),
     ])
 }
 
-fn agent_default() -> Account<Asset> {
-    Account(hashmap![
+fn agent_default() -> Account {
+    account::Account(hashmap![
         Asset::MissionTime => Quantity(1),
         Asset::Trust => Quantity(10000),
         Asset::EnlistCertificate(Instant::now()) => Quantity(1),
@@ -61,7 +63,7 @@ fn agent_default() -> Account<Asset> {
     ])
 }
 
-fn rates_default() -> HashMap<Market, Rate<Asset>> {
+fn rates_default() -> HashMap<Market, Rate> {
     hashmap![
         Market::MissionTimeWithResource =>
         Rate {

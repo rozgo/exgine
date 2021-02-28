@@ -4,7 +4,7 @@ use std::collections::HashMap;
 use std::ops;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Hash, Clone, Copy)]
-pub struct Quantity(pub i32);
+pub struct Quantity(pub i64);
 
 #[derive(Debug, Clone)]
 pub struct Account<TAsset: Asset>(pub HashMap<TAsset, Quantity>);
