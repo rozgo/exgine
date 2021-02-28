@@ -9,9 +9,14 @@ Core component for [OwnedEconomies](https://github.com/rozgo/OwnedEconomies)
 $ curl https://sh.rustup.rs -sSf | sh
 ```
 
-## Run tests:
+## Run test:
 ```
 cargo test -- --nocapture
+```
+
+## Run examples:
+```
+cargo run --example robot_mission
 ```
 - In every tick agent should be able to purchase 1 MissionTime.
 - First it tries to purchase MissionTime with its Resource through Exchange::MissionTimeWithResource.
@@ -23,9 +28,4 @@ If everything worked you should see test results like this:
 running 1 test
 RIP! Agent was alive for 2 hours, 55 minutes and 1 seconds.
 test agent_lifetime_until_death ... ok
-```
-
-## Run examples:
-```
-cargo run --example robot_mission
 ```
