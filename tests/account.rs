@@ -1,9 +1,7 @@
 extern crate exgine;
 extern crate uuid;
 
-use account::*;
-use asset;
-use exgine::*;
+use exgine::{account::*, asset, hashmap};
 use std::time::Instant;
 use uuid::Uuid;
 

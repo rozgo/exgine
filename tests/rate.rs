@@ -1,9 +1,9 @@
 extern crate exgine;
 
-use account::*;
-use asset;
-use exgine::*;
-use rate::*;
+use exgine::{
+    account::{self, Quantity, Tranx},
+    asset, hashmap, rate,
+};
 use std::collections::HashMap;
 use std::time::Instant;
 
@@ -43,15 +43,17 @@ pub enum RobotMissionMarket {
 
 type Asset = RobotMissionAsset;
 type Market = RobotMissionMarket;
+type Rate = rate::Rate<RobotMissionAsset>;
+type Account = account::Account<RobotMissionAsset>;
 
-fn mission_default() -> Account<Asset> {
-    Account(hashmap![
+fn mission_default() -> Account {
+    account::Account(hashmap![
         Asset::MissionTime => Quantity(1000000),
     ])
 }
 
-fn agent_default() -> Account<Asset> {
-    Account(hashmap![
+fn agent_default() -> Account {
+    account::Account(hashmap![
         Asset::Reward(Reward::Score) => Quantity(10000),
         Asset::Reward(Reward::Token) => Quantity(10000),
         Asset::Reward(Reward::Prediction) => Quantity(10000),
@@ -59,7 +61,7 @@ fn agent_default() -> Account<Asset> {
     ])
 }
 
-fn rates_default() -> HashMap<Market, Rate<Asset>> {
+fn rates_default() -> HashMap<Market, Rate> {
     hashmap![
         Market::MissionTimeWithResource =>
         Rate {
@@ -80,14 +82,14 @@ fn rate_buy_lifetime() {
     let rates = rates_default();
     let rate = rates.get(&Market::MissionTimeWithResource).unwrap();
 
-    let res_seller = Account(hashmap![
+    let res_seller = account::Account(hashmap![
         Asset::MissionTime => Quantity(999999),
         Asset::Reward(Reward::Token) => Quantity(3),
         Asset::Reward(Reward::Prediction) => Quantity(9),
         Asset::Reward(Reward::Policy) => Quantity(1),
     ]);
 
-    let res_buyer = Account(hashmap![
+    let res_buyer = account::Account(hashmap![
         Asset::MissionTime => Quantity(1),
         Asset::Reward(Reward::Score) => Quantity(10000),
         Asset::Reward(Reward::Token) => Quantity(9997),
@@ -111,14 +113,14 @@ fn rate_buy_lifetime_quantity() {
     let rates = rates_default();
     let rate = rates.get(&Market::MissionTimeWithResource).unwrap();
 
-    let res_seller = Account(hashmap![
+    let res_seller = account::Account(hashmap![
         Asset::MissionTime => Quantity(999998),
         Asset::Reward(Reward::Token) => Quantity(6),
         Asset::Reward(Reward::Prediction) => Quantity(18),
         Asset::Reward(Reward::Policy) => Quantity(2),
     ]);
 
-    let res_buyer = Account(hashmap![
+    let res_buyer = account::Account(hashmap![
         Asset::MissionTime => Quantity(2),
         Asset::Reward(Reward::Score) => Quantity(10000),
         Asset::Reward(Reward::Token) => Quantity(9994),
