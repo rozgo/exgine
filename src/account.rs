@@ -42,8 +42,8 @@ impl<TAsset: Asset> Account<TAsset> {
         let mut success = true;
         let mut deficit = hashmap![];
         {
-            let Account(buyer) = &buyer;
-            let Account(debit) = debit;
+            let buyer = buyer.assets();
+            let debit = debit.assets();
             for asset in debit.keys() {
                 match buyer.get(asset) {
                     Some(Quantity::Amount(quantity)) if *quantity < 0 => {
