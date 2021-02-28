@@ -1,9 +1,12 @@
 [package]
+authors = ["Alex Rozgo <alex.rozgo@gmail.com>"]
 name = "exgine"
 version = "0.1.0"
-authors = ["Alex Rozgo <alex.rozgo@gmail.com>"]
 
 [dependencies]
+
+[dev-dependencies]
+uuid = "0.8.2"
 
 [lib]
 name = "exgine"
