@@ -9,7 +9,7 @@ Core component for [OwnedEconomies](https://github.com/rozgo/OwnedEconomies)
 $ curl https://sh.rustup.rs -sSf | sh
 ```
 
-## Run test:
+## Run tests:
 ```
 cargo test -- --nocapture
 ```

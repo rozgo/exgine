@@ -49,18 +49,18 @@ type Asset = TestAsset;
 fn accounts_equal_exisiting_assets() {
     let nft_coupon = NonFungible::Coupon(Unique::default());
     let lhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(500),
-        Asset::Fungible(Fungible::Token) => Quantity(10000),
-        Asset::Fungible(Fungible::Coin) => Quantity(800),
-        Asset::Fungible(Fungible::Point) => Quantity(100),
-        Asset::NonFungible(nft_coupon) => Quantity(500),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(500),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(10000),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(800),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(100),
+        Asset::NonFungible(nft_coupon) => Quantity::Amount(500),
     ]);
     let rhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(500),
-        Asset::Fungible(Fungible::Coin) => Quantity(800),
-        Asset::Fungible(Fungible::Point) => Quantity(100),
-        Asset::Fungible(Fungible::Token) => Quantity(10000),
-        Asset::NonFungible(nft_coupon) => Quantity(500),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(500),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(800),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(100),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(10000),
+        Asset::NonFungible(nft_coupon) => Quantity::Amount(500),
     ]);
     assert_eq!(lhs, rhs);
 }
@@ -69,15 +69,15 @@ fn accounts_equal_exisiting_assets() {
 fn accounts_equal_missing_assets() {
     let nft_coupon = NonFungible::Coupon(Unique::default());
     let lhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(0),
-        Asset::Fungible(Fungible::Token) => Quantity(10000),
-        Asset::Fungible(Fungible::Point) => Quantity(100),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(0),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(10000),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(100),
     ]);
     let rhs = Account(hashmap![
-        Asset::Fungible(Fungible::Coin) => Quantity(0),
-        Asset::Fungible(Fungible::Point) => Quantity(100),
-        Asset::Fungible(Fungible::Token) => Quantity(10000),
-        Asset::NonFungible(nft_coupon) => Quantity(0),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(0),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(100),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(10000),
+        Asset::NonFungible(nft_coupon) => Quantity::Amount(0),
     ]);
     assert_eq!(lhs, rhs);
 }
@@ -85,28 +85,28 @@ fn accounts_equal_missing_assets() {
 #[test]
 fn accounts_not_equal_existing() {
     let lhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(500),
-        Asset::Fungible(Fungible::Token) => Quantity(10000),
-        Asset::Fungible(Fungible::Coin) => Quantity(800),
-        Asset::Fungible(Fungible::Point) => Quantity(100),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(500),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(10000),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(800),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(100),
     ]);
     let rhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(500),
-        Asset::Fungible(Fungible::Token) => Quantity(10000),
-        Asset::Fungible(Fungible::Coin) => Quantity(800),
-        Asset::Fungible(Fungible::Point) => Quantity(10),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(500),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(10000),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(800),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(10),
     ]);
     assert!(lhs != rhs);
 
     let nft_coupon_a = NonFungible::Coupon(Unique::default());
     let nft_coupon_b = NonFungible::Coupon(Unique::default());
     let lhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(500),
-        Asset::NonFungible(nft_coupon_a) => Quantity(1),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(500),
+        Asset::NonFungible(nft_coupon_a) => Quantity::Amount(1),
     ]);
     let rhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(500),
-        Asset::NonFungible(nft_coupon_b) => Quantity(1),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(500),
+        Asset::NonFungible(nft_coupon_b) => Quantity::Amount(1),
     ]);
     assert!(lhs != rhs);
 }
@@ -114,22 +114,22 @@ fn accounts_not_equal_existing() {
 #[test]
 fn accounts_sub_existing_assets() {
     let lhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(500),
-        Asset::Fungible(Fungible::Token) => Quantity(10000),
-        Asset::Fungible(Fungible::Coin) => Quantity(800),
-        Asset::Fungible(Fungible::Point) => Quantity(100),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(500),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(10000),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(800),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(100),
     ]);
     let rhs = Account(hashmap![
-        Asset::Fungible(Fungible::Token) => Quantity(10000),
-        Asset::Fungible(Fungible::Upvote) => Quantity(250),
-        Asset::Fungible(Fungible::Point) => Quantity(200),
-        Asset::Fungible(Fungible::Coin) => Quantity(700),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(10000),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(250),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(200),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(700),
     ]);
     let res = Account(hashmap![
-        Asset::Fungible(Fungible::Coin) => Quantity(100),
-        Asset::Fungible(Fungible::Upvote) => Quantity(250),
-        Asset::Fungible(Fungible::Token) => Quantity(0),
-        Asset::Fungible(Fungible::Point) => Quantity(-100),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(100),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(250),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(0),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(-100),
     ]);
     assert_eq!(&lhs - &rhs, res);
 }
@@ -137,20 +137,20 @@ fn accounts_sub_existing_assets() {
 #[test]
 fn accounts_sub_missing_assets() {
     let lhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(500),
-        Asset::Fungible(Fungible::Coin) => Quantity(800),
-        Asset::Fungible(Fungible::Point) => Quantity(100),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(500),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(800),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(100),
     ]);
     let rhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(250),
-        Asset::Fungible(Fungible::Token) => Quantity(10000),
-        Asset::Fungible(Fungible::Coin) => Quantity(700),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(250),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(10000),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(700),
     ]);
     let res = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(250),
-        Asset::Fungible(Fungible::Token) => Quantity(-10000),
-        Asset::Fungible(Fungible::Coin) => Quantity(100),
-        Asset::Fungible(Fungible::Point) => Quantity(100),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(250),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(-10000),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(100),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(100),
     ]);
     assert_eq!(&lhs - &rhs, res);
 }
@@ -158,22 +158,22 @@ fn accounts_sub_missing_assets() {
 #[test]
 fn accounts_add_existing_assets() {
     let lhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(250),
-        Asset::Fungible(Fungible::Token) => Quantity(100),
-        Asset::Fungible(Fungible::Coin) => Quantity(800),
-        Asset::Fungible(Fungible::Point) => Quantity(400),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(250),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(100),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(800),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(400),
     ]);
     let rhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(250),
-        Asset::Fungible(Fungible::Token) => Quantity(200),
-        Asset::Fungible(Fungible::Point) => Quantity(200),
-        Asset::Fungible(Fungible::Coin) => Quantity(700),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(250),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(200),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(200),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(700),
     ]);
     let res = Account(hashmap![
-        Asset::Fungible(Fungible::Coin) => Quantity(1500),
-        Asset::Fungible(Fungible::Upvote) => Quantity(500),
-        Asset::Fungible(Fungible::Token) => Quantity(300),
-        Asset::Fungible(Fungible::Point) => Quantity(600),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(1500),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(500),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(300),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(600),
     ]);
     assert_eq!(&lhs + &rhs, res);
 }
@@ -183,24 +183,24 @@ fn accounts_add_missing_assets() {
     let nft_coupon_a = NonFungible::Coupon(Unique::default());
     let nft_coupon_b = NonFungible::Coupon(Unique::default());
     let lhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(500),
-        Asset::Fungible(Fungible::Coin) => Quantity(800),
-        Asset::Fungible(Fungible::Point) => Quantity(100),
-        Asset::NonFungible(nft_coupon_a) => Quantity(1),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(500),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(800),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(100),
+        Asset::NonFungible(nft_coupon_a) => Quantity::Amount(1),
     ]);
     let rhs = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(250),
-        Asset::Fungible(Fungible::Token) => Quantity(10000),
-        Asset::Fungible(Fungible::Coin) => Quantity(700),
-        Asset::NonFungible(nft_coupon_b) => Quantity(1),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(250),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(10000),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(700),
+        Asset::NonFungible(nft_coupon_b) => Quantity::Amount(1),
     ]);
     let res = Account(hashmap![
-        Asset::Fungible(Fungible::Upvote) => Quantity(750),
-        Asset::Fungible(Fungible::Token) => Quantity(10000),
-        Asset::Fungible(Fungible::Coin) => Quantity(1500),
-        Asset::Fungible(Fungible::Point) => Quantity(100),
-        Asset::NonFungible(nft_coupon_a) => Quantity(1),
-        Asset::NonFungible(nft_coupon_b) => Quantity(1),
+        Asset::Fungible(Fungible::Upvote) => Quantity::Amount(750),
+        Asset::Fungible(Fungible::Token) => Quantity::Amount(10000),
+        Asset::Fungible(Fungible::Coin) => Quantity::Amount(1500),
+        Asset::Fungible(Fungible::Point) => Quantity::Amount(100),
+        Asset::NonFungible(nft_coupon_a) => Quantity::Amount(1),
+        Asset::NonFungible(nft_coupon_b) => Quantity::Amount(1),
     ]);
     assert_eq!(&lhs + &rhs, res);
 }

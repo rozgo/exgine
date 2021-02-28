@@ -4,7 +4,9 @@ use std::collections::HashMap;
 use std::ops;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Hash, Clone, Copy)]
-pub struct Quantity(pub i64);
+pub enum Quantity {
+    Amount(i64),
+}
 
 #[derive(Debug, Clone)]
 pub struct Account<TAsset: Asset>(pub HashMap<TAsset, Quantity>);
@@ -18,7 +20,7 @@ impl<TAsset: Asset> Account<TAsset> {
     pub fn quantity(&self, asset: &TAsset) -> Quantity {
         match self.0.get(asset) {
             Some(quantity) => quantity.clone(),
-            None => Quantity(0),
+            None => Quantity::Amount(0),
         }
     }
 
@@ -38,9 +40,9 @@ impl<TAsset: Asset> Account<TAsset> {
             let Account(debit) = debit;
             for asset in debit.keys() {
                 match buyer.get(asset) {
-                    Some(Quantity(quantity)) if *quantity < 0 => {
+                    Some(Quantity::Amount(quantity)) if *quantity < 0 => {
                         success = false;
-                        deficit.insert(asset.clone(), Quantity(*quantity));
+                        deficit.insert(asset.clone(), Quantity::Amount(*quantity));
                     }
                     _ => (),
                 }
@@ -63,7 +65,7 @@ impl<TAsset: Asset> Account<TAsset> {
         let Account(rhs) = rhs;
         for rhs_key in rhs.keys() {
             if !lhs.contains_key(rhs_key) {
-                lhs.insert(rhs_key.clone(), Quantity(0));
+                lhs.insert(rhs_key.clone(), Quantity::Amount(0));
             }
         }
     }
@@ -105,7 +107,9 @@ impl<TAsset: Asset> ops::Add<&Account<TAsset>> for &Account<TAsset> {
     type Output = Account<TAsset>;
 
     fn add(self, rhs: &Account<TAsset>) -> Account<TAsset> {
-        Account::op(self, rhs, |Quantity(lq), Quantity(rq)| Quantity(lq + rq))
+        Account::op(self, rhs, |Quantity::Amount(lq), Quantity::Amount(rq)| {
+            Quantity::Amount(lq + rq)
+        })
     }
 }
 
@@ -113,7 +117,9 @@ impl<TAsset: Asset> ops::Sub<&Account<TAsset>> for &Account<TAsset> {
     type Output = Account<TAsset>;
 
     fn sub(self, rhs: &Account<TAsset>) -> Account<TAsset> {
-        Account::op(self, rhs, |Quantity(lq), Quantity(rq)| Quantity(lq - rq))
+        Account::op(self, rhs, |Quantity::Amount(lq), Quantity::Amount(rq)| {
+            Quantity::Amount(lq - rq)
+        })
     }
 }
 
@@ -124,11 +130,11 @@ impl<TAsset: Asset> ops::Mul<Quantity> for &Account<TAsset> {
         let Account(lhs) = self;
         let keys = lhs.keys();
         let mut lhs = lhs.clone();
-        let Quantity(rhs_quantity) = rhs;
+        let Quantity::Amount(rhs_quantity) = rhs;
         for key in keys {
-            let q = lhs.entry(key.clone()).or_insert(Quantity(0));
-            let Quantity(lhs_quantity) = *q;
-            *q = Quantity(lhs_quantity * rhs_quantity);
+            let q = lhs.entry(key.clone()).or_insert(Quantity::Amount(0));
+            let Quantity::Amount(lhs_quantity) = *q;
+            *q = Quantity::Amount(lhs_quantity * rhs_quantity);
         }
         Account(lhs)
     }

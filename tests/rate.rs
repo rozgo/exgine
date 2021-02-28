@@ -48,16 +48,16 @@ type Account = account::Account<RobotMissionAsset>;
 
 fn mission_default() -> Account {
     account::Account(hashmap![
-        Asset::MissionTime => Quantity(1000000),
+        Asset::MissionTime => Quantity::Amount(1000000),
     ])
 }
 
 fn agent_default() -> Account {
     account::Account(hashmap![
-        Asset::Reward(Reward::Score) => Quantity(10000),
-        Asset::Reward(Reward::Token) => Quantity(10000),
-        Asset::Reward(Reward::Prediction) => Quantity(10000),
-        Asset::Reward(Reward::Policy) => Quantity(10000),
+        Asset::Reward(Reward::Score) => Quantity::Amount(10000),
+        Asset::Reward(Reward::Token) => Quantity::Amount(10000),
+        Asset::Reward(Reward::Prediction) => Quantity::Amount(10000),
+        Asset::Reward(Reward::Policy) => Quantity::Amount(10000),
     ])
 }
 
@@ -65,11 +65,11 @@ fn rates_default() -> HashMap<Market, Rate> {
     hashmap![
         Market::MissionTimeWithResource =>
         Rate {
-            credit: hashmap![Asset::MissionTime => Quantity(1)],
+            credit: hashmap![Asset::MissionTime => Quantity::Amount(1)],
             debit: hashmap![
-                Asset::Reward(Reward::Prediction) => Quantity(9),
-                Asset::Reward(Reward::Token) => Quantity(3),
-                Asset::Reward(Reward::Policy) => Quantity(1),
+                Asset::Reward(Reward::Prediction) => Quantity::Amount(9),
+                Asset::Reward(Reward::Token) => Quantity::Amount(3),
+                Asset::Reward(Reward::Policy) => Quantity::Amount(1),
             ],
         },
     ]
@@ -83,21 +83,21 @@ fn rate_buy_lifetime() {
     let rate = rates.get(&Market::MissionTimeWithResource).unwrap();
 
     let res_seller = account::Account(hashmap![
-        Asset::MissionTime => Quantity(999999),
-        Asset::Reward(Reward::Token) => Quantity(3),
-        Asset::Reward(Reward::Prediction) => Quantity(9),
-        Asset::Reward(Reward::Policy) => Quantity(1),
+        Asset::MissionTime => Quantity::Amount(999999),
+        Asset::Reward(Reward::Token) => Quantity::Amount(3),
+        Asset::Reward(Reward::Prediction) => Quantity::Amount(9),
+        Asset::Reward(Reward::Policy) => Quantity::Amount(1),
     ]);
 
     let res_buyer = account::Account(hashmap![
-        Asset::MissionTime => Quantity(1),
-        Asset::Reward(Reward::Score) => Quantity(10000),
-        Asset::Reward(Reward::Token) => Quantity(9997),
-        Asset::Reward(Reward::Prediction) => Quantity(9991),
-        Asset::Reward(Reward::Policy) => Quantity(9999),
+        Asset::MissionTime => Quantity::Amount(1),
+        Asset::Reward(Reward::Score) => Quantity::Amount(10000),
+        Asset::Reward(Reward::Token) => Quantity::Amount(9997),
+        Asset::Reward(Reward::Prediction) => Quantity::Amount(9991),
+        Asset::Reward(Reward::Policy) => Quantity::Amount(9999),
     ]);
 
-    match Account::exchange(rate, Quantity(1), &agent, &mission) {
+    match Account::exchange(rate, Quantity::Amount(1), &agent, &mission) {
         Tranx::Approved(buyer, seller) => {
             assert_eq!(res_seller, seller);
             assert_eq!(res_buyer, buyer);
@@ -114,21 +114,21 @@ fn rate_buy_lifetime_quantity() {
     let rate = rates.get(&Market::MissionTimeWithResource).unwrap();
 
     let res_seller = account::Account(hashmap![
-        Asset::MissionTime => Quantity(999998),
-        Asset::Reward(Reward::Token) => Quantity(6),
-        Asset::Reward(Reward::Prediction) => Quantity(18),
-        Asset::Reward(Reward::Policy) => Quantity(2),
+        Asset::MissionTime => Quantity::Amount(999998),
+        Asset::Reward(Reward::Token) => Quantity::Amount(6),
+        Asset::Reward(Reward::Prediction) => Quantity::Amount(18),
+        Asset::Reward(Reward::Policy) => Quantity::Amount(2),
     ]);
 
     let res_buyer = account::Account(hashmap![
-        Asset::MissionTime => Quantity(2),
-        Asset::Reward(Reward::Score) => Quantity(10000),
-        Asset::Reward(Reward::Token) => Quantity(9994),
-        Asset::Reward(Reward::Prediction) => Quantity(9982),
-        Asset::Reward(Reward::Policy) => Quantity(9998),
+        Asset::MissionTime => Quantity::Amount(2),
+        Asset::Reward(Reward::Score) => Quantity::Amount(10000),
+        Asset::Reward(Reward::Token) => Quantity::Amount(9994),
+        Asset::Reward(Reward::Prediction) => Quantity::Amount(9982),
+        Asset::Reward(Reward::Policy) => Quantity::Amount(9998),
     ]);
 
-    match Account::exchange(rate, Quantity(2), &agent, &mission) {
+    match Account::exchange(rate, Quantity::Amount(2), &agent, &mission) {
         Tranx::Approved(buyer, seller) => {
             assert_eq!(res_seller, seller);
             assert_eq!(res_buyer, buyer);
