@@ -2,7 +2,7 @@ use crate::asset::*;
 use crate::rate::*;
 use std::collections::HashMap;
 use std::ops;
-use substrate_fixed::types::I32F32;
+pub use substrate_fixed::types::I32F32;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Hash, Clone, Copy)]
 pub enum Quantity {
