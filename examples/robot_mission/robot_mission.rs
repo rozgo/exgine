@@ -2,7 +2,7 @@ extern crate exgine;
 mod market;
 
 use exgine::{
-    account::{self, Quantity, Tranx},
+    account::{self, Quantity, fixed_amount, Tranx},
     hashmap, rate,
 };
 use market::*;
@@ -33,7 +33,7 @@ impl Agent {
         if let Some(Tranx::Approved(buyer, _)) = exs.iter().find_map(|ex| {
             match Account::exchange(
                 rates.get(ex).unwrap(),
-                Quantity::Amount(1),
+                fixed_amount(1),
                 &self.account,
                 mission,
             ) {
@@ -52,19 +52,19 @@ impl Agent {
 
 fn mission_default() -> Account {
     Account::from(hashmap![
-        Asset::MissionTime => Quantity::Amount(1000000),
+        Asset::MissionTime => fixed_amount(1000000),
     ])
 }
 
 fn agent_default() -> Account {
     Account::from(hashmap![
-        Asset::MissionTime => Quantity::Amount(1),
-        Asset::Trust => Quantity::Amount(10000),
-        Asset::EnlistCertificate(Instant::now()) => Quantity::Amount(1),
-        Asset::Resource(Resource::Battery) => Quantity::Amount(10000),
-        Asset::Resource(Resource::RgbSensor) => Quantity::Amount(10000),
-        Asset::Resource(Resource::ThermalSensor) => Quantity::Amount(10000),
-        Asset::Resource(Resource::PoseEstimation) => Quantity::Amount(10000),
+        Asset::MissionTime => fixed_amount(1),
+        Asset::Trust => fixed_amount(10000),
+        Asset::EnlistCertificate(Instant::now()) => fixed_amount(1),
+        Asset::Resource(Resource::Battery) => fixed_amount(10000),
+        Asset::Resource(Resource::RgbSensor) => fixed_amount(10000),
+        Asset::Resource(Resource::ThermalSensor) => fixed_amount(10000),
+        Asset::Resource(Resource::PoseEstimation) => fixed_amount(10000),
     ])
 }
 
@@ -72,18 +72,18 @@ fn rates_default() -> HashMap<Market, Rate> {
     hashmap![
         Market::MissionTimeWithResource =>
         Rate {
-            credit: hashmap![Asset::MissionTime => Quantity::Amount(1)],
+            credit: hashmap![Asset::MissionTime => fixed_amount(1)],
             debit: hashmap![
-                Asset::Resource(Resource::Battery) => Quantity::Amount(20),
-                Asset::Resource(Resource::ThermalSensor) => Quantity::Amount(9),
-                Asset::Resource(Resource::RgbSensor) => Quantity::Amount(3),
-                Asset::Resource(Resource::PoseEstimation) => Quantity::Amount(1),
+                Asset::Resource(Resource::Battery) => fixed_amount(20),
+                Asset::Resource(Resource::ThermalSensor) => fixed_amount(9),
+                Asset::Resource(Resource::RgbSensor) => fixed_amount(3),
+                Asset::Resource(Resource::PoseEstimation) => fixed_amount(1),
             ],
         },
         Market::MissionTimeWithTrust =>
         Rate {
-            credit: hashmap![Asset::MissionTime => Quantity::Amount(1)],
-            debit: hashmap![Asset::Trust => Quantity::Amount(1)],
+            credit: hashmap![Asset::MissionTime => fixed_amount(1)],
+            debit: hashmap![Asset::Trust => fixed_amount(1)],
         },
     ]
 }

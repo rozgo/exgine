@@ -2,8 +2,14 @@
 authors = ["Alex Rozgo <alex.rozgo@gmail.com>"]
 name = "exgine"
 version = "0.1.0"
+edition = "2018"
 
 [dependencies]
+
+[dependencies.substrate-fixed]
+default-features = false
+git = "https://github.com/rozgo/substrate-fixed.git"
+package = "substrate-fixed"
 
 [dev-dependencies]
 uuid = "0.8.2"

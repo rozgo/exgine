@@ -1,11 +1,16 @@
-use asset::*;
-use rate::*;
+use crate::asset::*;
+use crate::rate::*;
 use std::collections::HashMap;
 use std::ops;
+use substrate_fixed::types::I32F32;
 
 #[derive(Debug, PartialEq, Eq, PartialOrd, Hash, Clone, Copy)]
 pub enum Quantity {
-    Amount(i64),
+    Amount(I32F32),
+}
+
+pub fn fixed_amount(amount: i32) -> Quantity {
+    Quantity::Amount(I32F32::from(amount))
 }
 
 #[derive(Debug, Clone)]
@@ -26,7 +31,7 @@ impl<TAsset: Asset> Account<TAsset> {
     pub fn quantity(&self, asset: &TAsset) -> Quantity {
         match self.0.get(asset) {
             Some(quantity) => quantity.clone(),
-            None => Quantity::Amount(0),
+            None => fixed_amount(0),
         }
     }
 
@@ -71,7 +76,7 @@ impl<TAsset: Asset> Account<TAsset> {
         let Account(rhs) = rhs;
         for rhs_key in rhs.keys() {
             if !lhs.contains_key(rhs_key) {
-                lhs.insert(rhs_key.clone(), Quantity::Amount(0));
+                lhs.insert(rhs_key.clone(), fixed_amount(0));
             }
         }
     }
@@ -138,7 +143,7 @@ impl<TAsset: Asset> ops::Mul<Quantity> for &Account<TAsset> {
         let mut lhs = lhs.clone();
         let Quantity::Amount(rhs_quantity) = rhs;
         for key in keys {
-            let q = lhs.entry(key.clone()).or_insert(Quantity::Amount(0));
+            let q = lhs.entry(key.clone()).or_insert(fixed_amount(0));
             let Quantity::Amount(lhs_quantity) = *q;
             *q = Quantity::Amount(lhs_quantity * rhs_quantity);
         }
